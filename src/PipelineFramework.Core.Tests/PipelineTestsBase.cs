@@ -1,5 +1,5 @@
 ﻿using PipelineFramework.Abstractions;
-using PipelineFramework.Core.Tests.Infrastructure;
+using PipelineFramework.Tests.SharedInfrastructure;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 

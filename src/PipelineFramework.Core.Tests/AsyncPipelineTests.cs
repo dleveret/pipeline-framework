@@ -1,14 +1,15 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PipelineFramework.Core.Tests.Infrastructure;
+using PipelineFramework.Abstractions;
 using PipelineFramework.Exceptions;
+using PipelineFramework.Tests.SharedInfrastructure;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using PipelineFramework.Abstractions;
+
 // ReSharper disable ObjectCreationAsStatement
 
 namespace PipelineFramework.Core.Tests
@@ -26,13 +27,27 @@ namespace PipelineFramework.Core.Tests
         }
 
         [TestMethod]
+        public void AsyncPipeline_NullNamesList_Test()
+        {
+            Action act = () => new AsyncPipeline<TestPayload>(
+                new DictionaryPipelineComponentResolver(new Dictionary<string, IPipelineComponent>()),
+                null as IEnumerable<string>);
+
+            act.Should().ThrowExactly<ArgumentNullException>()
+                .And.ParamName
+                .Should().Be("componentNames");
+        }
+        
+        [TestMethod]
         public void AsyncPipeline_NullTypeList_Test()
         {
             Action act = () => new AsyncPipeline<TestPayload>(
                 new DictionaryPipelineComponentResolver(new Dictionary<string, IPipelineComponent>()),  
                 null as IEnumerable<Type>);
 
-            act.Should().ThrowExactly<ArgumentNullException>();
+            act.Should().ThrowExactly<ArgumentNullException>()
+                .And.ParamName
+                .Should().Be("componentTypes");
         }
 
         [TestMethod]

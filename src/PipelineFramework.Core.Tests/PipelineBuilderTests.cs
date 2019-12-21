@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PipelineFramework.Abstractions;
 using PipelineFramework.Abstractions.Builder;
 using PipelineFramework.Builder;
-using PipelineFramework.Core.Tests.Infrastructure;
+using PipelineFramework.Tests.SharedInfrastructure;
 using System.Diagnostics.CodeAnalysis;
 
 namespace PipelineFramework.Core.Tests

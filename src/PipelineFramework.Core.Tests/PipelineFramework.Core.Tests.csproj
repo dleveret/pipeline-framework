@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFrameworks>net46;netcoreapp2.1</TargetFrameworks>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -16,5 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\PipelineFramework.Core\PipelineFramework.Core.csproj" />
   </ItemGroup>
+
+  <Import Project="..\SharedInfrastructure\SharedInfrastructure.projitems" Label="Shared" />
 
 </Project>

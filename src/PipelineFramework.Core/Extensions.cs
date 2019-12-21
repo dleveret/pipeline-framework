@@ -104,10 +104,16 @@ namespace PipelineFramework
         /// <param name="s"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T Convert<T>(this string s)
+        public static T Convert<T>(this string s) 
         {
-            var converter = TypeDescriptor.GetConverter(typeof(T));
-            return (T)converter.ConvertFromString(s);
+            try
+            {
+                return (T)TypeDescriptor.GetConverter(typeof(T)).ConvertFromString(s);
+            }
+            catch (Exception exception)
+            {
+                throw exception.GetBaseException();
+            }
         }
     }
 }

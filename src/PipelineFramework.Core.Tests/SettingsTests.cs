@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PipelineFramework.Core.Tests.Infrastructure;
+using PipelineFramework.Tests.SharedInfrastructure;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 

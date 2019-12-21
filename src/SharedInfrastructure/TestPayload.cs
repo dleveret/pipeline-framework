@@ -7,6 +7,9 @@ namespace PipelineFramework.Tests.SharedInfrastructure
     {
         public int Count { get; set; }
         public string FooStatus { get; set; }
+        public bool FooWasCalled => !string.IsNullOrWhiteSpace(FooStatus);
         public string BarStatus { get; set; }
+        public bool BarWasCalled => !string.IsNullOrWhiteSpace(BarStatus);
     }
+
 }
