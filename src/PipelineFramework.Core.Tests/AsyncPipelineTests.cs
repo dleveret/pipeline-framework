@@ -134,7 +134,7 @@ namespace PipelineFramework.Core.Tests
         {
             var types = new List<Type> { typeof(FooComponent), typeof(BarComponent) };
 
-            var target = new AsyncPipeline<TestPayload>(PipelineComponentResolver, types, null);
+            var target = new AsyncPipeline<TestPayload>(PipelineComponentResolver, types);
             var result = await target.ExecuteAsync(new TestPayload());
 
             Assert.IsNotNull(result);

@@ -72,7 +72,7 @@ namespace PipelineFramework.Core.Tests
         {
             var types = new List<string> { typeof(FooComponent).Name, typeof(BarComponent).Name };
 
-            var target = new Pipeline<TestPayload>(PipelineComponentResolver, types, null);
+            var target = new Pipeline<TestPayload>(PipelineComponentResolver, types);
             var result = target.Execute(new TestPayload());
 
             Assert.IsNotNull(result);
@@ -100,7 +100,7 @@ namespace PipelineFramework.Core.Tests
         {
             var types = new List<Type> { typeof(FooComponent), typeof(BarComponent) };
 
-            var target = new Pipeline<TestPayload>(PipelineComponentResolver, types, null);
+            var target = new Pipeline<TestPayload>(PipelineComponentResolver, types);
             var result = target.Execute(new TestPayload());
 
             Assert.IsNotNull(result);
