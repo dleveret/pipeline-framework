@@ -57,46 +57,32 @@ namespace PipelineFramework.LightInject
         public static IServiceRegistry RegisterPipelineComponentsFromAssembly(this IServiceRegistry serviceRegistry, Assembly assembly)
             => RegisterComponentsFromAssembly(serviceRegistry, assembly);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TInterceptor"></typeparam>
-        /// <param name="serviceRegistry"></param>
         public static void AddAsyncPipelineComponentLogging<TInterceptor>(this IServiceRegistry serviceRegistry)
             where TInterceptor : AsyncInterceptor
         {
             serviceRegistry.Register<AsyncInterceptor, TInterceptor>();
 
             serviceRegistry.Intercept(
-                sr => sr.ServiceType.IsAsyncPipelineComponentInterface(),
+                sr => IsAsyncPipelineComponentInterface(sr.ServiceType),
                 (factory, proxy) => proxy.Implement(factory.GetAsyncInterceptor, mi => mi.Name == "ExecuteAsync"));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="serviceRegistry"></param>
         public static void AddAsyncPipelineComponentLogging(this IServiceRegistry serviceRegistry)
         {
             serviceRegistry.Register<AsyncInterceptor, AsyncPipelineComponentInterceptor>();
 
             serviceRegistry.Intercept(
-                sr => sr.ServiceType.IsAsyncPipelineComponentInterface(),
+                sr => IsAsyncPipelineComponentInterface(sr.ServiceType),
                 (factory, proxy) => proxy.Implement(factory.GetAsyncInterceptor, mi => mi.Name == "ExecuteAsync"));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TInterceptor"></typeparam>
-        /// <param name="serviceRegistry"></param>
         public static void AddPipelineComponentLogging<TInterceptor>(this IServiceRegistry serviceRegistry)
             where TInterceptor : IInterceptor
         {
             serviceRegistry.Register<IInterceptor, TInterceptor>();
 
             serviceRegistry.Intercept(
-                sr => sr.ServiceType.IsPipelineComponentInterface(),
+                sr => IsPipelineComponentInterface(sr.ServiceType),
                 (factory, definition) => definition.Implement(factory.GetInterceptor, mi => mi.Name == "Execute"));
         }
 
@@ -109,22 +95,24 @@ namespace PipelineFramework.LightInject
             serviceRegistry.Register<IInterceptor, PipelineComponentInterceptor>();
 
             serviceRegistry.Intercept(
-                sr => sr.ServiceType.IsPipelineComponentInterface(),
+                sr => IsPipelineComponentInterface(sr.ServiceType),
                 (factory, definition) => definition.Implement(factory.GetInterceptor, mi => mi.Name == "Execute"));
         }
 
-        #region Private Extensions
-        private static bool IsPipelineComponentInterface(this Type type) 
-            => type.IsInterface && 
-               type.IsGenericType &&
-                type.GetGenericTypeDefinition() == typeof(IPipelineComponent<>);
+        #region Private Methods
+        private static bool IsPipelineComponentInterface(Type type) 
+            => type.IsInterface && IsPipelineComponent(type);
 
-        private static bool IsAsyncPipelineComponentInterface(this Type type)
-            => type.IsInterface &&
-               type.IsGenericType &&
-               type.GetGenericTypeDefinition() == typeof(IAsyncPipelineComponent<>);
+        private static bool IsPipelineComponent(Type i) =>
+            i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IPipelineComponent<>);
 
-        private static IServiceRegistry RegisterComponentsFromAssembly(this IServiceRegistry serviceRegistry, Assembly assembly, bool useAsyncComponents = false)
+        private static bool IsAsyncPipelineComponentInterface(Type type)
+            => type.IsInterface && IsAsyncPipelineComponent(type);
+
+        private static bool IsAsyncPipelineComponent(Type i) =>
+            i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAsyncPipelineComponent<>);
+
+        private static IServiceRegistry RegisterComponentsFromAssembly(IServiceRegistry serviceRegistry, Assembly assembly, bool useAsyncComponents = false)
         {
             Func<Type, bool> isComponent;
             if (useAsyncComponents) isComponent = IsAsyncPipelineComponent;
@@ -150,10 +138,6 @@ namespace PipelineFramework.LightInject
             }
 
             return serviceRegistry;
-
-            //Local functions
-            bool IsAsyncPipelineComponent(Type i) => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAsyncPipelineComponent<>);
-            bool IsPipelineComponent(Type i) => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IPipelineComponent<>);
         } 
         #endregion
     }

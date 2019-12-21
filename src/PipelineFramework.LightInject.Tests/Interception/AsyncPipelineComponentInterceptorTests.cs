@@ -8,7 +8,6 @@ using PipelineFramework.LightInject.Logging;
 using PipelineFramework.Tests.SharedInfrastructure;
 using Serilog;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
